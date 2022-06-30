@@ -24,16 +24,10 @@ async function run() {
             const tasks = await tasksCollection.find().toArray();
             res.send(tasks);
         });
-
-        // app.put('/user/admin/:email', async (req, res) => {
-        //     const email = req.params.email;
-        //     const filter = { email: email };
-        //     const updateDoc = {
-        //         $set: { role: 'admin' },
-        //     };
-        //     const result = await userCollection.updateOne(filter, updateDoc);
-        //     res.send(result);
-        // });
+        app.get('/completedtask', async (req, res) => {
+            const tasks = await completedTaskCollection.find().toArray();
+            res.send(tasks);
+        });
 
         app.post('/task', async (req, res) => {
             const data = req.body;
@@ -54,13 +48,6 @@ async function run() {
             res.send(result);
         })
 
-        // app.get('/tool/:id', async (req, res) => {
-        //     const id = req.params.id;
-        //     const query = { _id: ObjectId(id) };
-        //     const result = await toolsCollection.findOne(query);
-        //     res.send(result);
-        // })
-
     }
     finally {
 
@@ -68,11 +55,6 @@ async function run() {
 }
 
 run().catch(console.dir)
-
-// app.get('/task', async (req, res) => {
-//     // const users = await userCollection.find().toArray();
-//     res.send("kaj krtese");
-// });
 
 app.get('/', (req, res) => {
     res.send('Server working correctly');
