@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -18,10 +18,11 @@ async function run() {
     try {
         await client.connect();
         const tasksCollection = client.db('express').collection('task');
+        const completedTaskCollection = client.db('express').collection('completed');
 
         app.get('/task', async (req, res) => {
-            // const users = await userCollection.find().toArray();
-            res.send("kaj krtese................");
+            const tasks = await tasksCollection.find().toArray();
+            res.send(tasks);
         });
 
         // app.put('/user/admin/:email', async (req, res) => {
@@ -40,12 +41,18 @@ async function run() {
             res.send(result);
         })
 
-        // app.delete('/tool/:id', async (req, res) => {
-        //     const id = req.params.id;
-        //     const query = { _id: ObjectId(id) };
-        //     const result = await toolsCollection.deleteOne(query);
-        //     res.send(result);
-        // })
+        app.post('/completedtask', async (req, res) => {
+            const data = req.body;
+            const result = await completedTaskCollection.insertOne(data);
+            res.send(result);
+        })
+
+        app.delete('/task/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await tasksCollection.deleteOne(query);
+            res.send(result);
+        })
 
         // app.get('/tool/:id', async (req, res) => {
         //     const id = req.params.id;
