@@ -48,6 +48,19 @@ async function run() {
             res.send(result);
         })
 
+        app.put('/task/:id', async (req, res) => {
+            const id = req.params.id;
+            const data = req.body;
+            const filter = { _id: ObjectId(id) };
+            console.log(filter, data, id)
+            const options = { upsert: true };
+            const updateDoc = {
+                $set: data,
+            };
+            const result = await tasksCollection.updateOne(filter, updateDoc, options);
+            res.send(result);
+        });
+
     }
     finally {
 
